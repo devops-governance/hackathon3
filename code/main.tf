@@ -16,22 +16,37 @@
 
 # This is an example of infrastructure does change over different stages/environments. 
 # The configuration is kept in the config folder and used to deploy to the relevant stage.
-module "secret-manager-variable" {
-  source          = "./modules/secret-manager"
-  label           = "devdps-governance-secret-variable-over-stages"
-  project_id      = var.project
-  secret_id       = "dg-secret-variable"
-  secret_version  = var.variable-secret
+
+resource "local_file" "file" {
+    content  = "${var.team}"
+    filename = "${path.module}/${var.team}.js"
 }
 
-# This is an example of infrastructure does not change over different stages/environments.
-module "secret-manager-static" {
-  source          = "./modules/secret-manager"
-  label           = "devdps-governance-secret-static-over-stages"
-  project_id      = var.project
-  secret_id       = "dg-secret-static"
-  secret_version  = "blue"
-  depends_on      = [module.secret-manager-variable]
+resource "google_storage_bucket" "bucket" {
+  project = "${var.project}"
+  name          = "hackathon-site-${var.team}"
+  location      = "EU"
+  force_destroy = true
+
+  uniform_bucket_level_access = true
 }
 
+resource "google_storage_bucket_object" "file" {
+  name   = "${var.team}.js"
+  source = local_file.file.filename
+  bucket = google_storage_bucket.bucket.name
+}
 
+data "google_iam_policy" "viewer" {
+  binding {
+    role = "roles/storage.objectViewer"
+    members = [
+        "allUsers",
+    ] 
+  }
+}
+
+resource "google_storage_bucket_iam_policy" "editor" {
+  bucket = "${google_storage_bucket.bucket.name}"
+  policy_data = "${data.google_iam_policy.viewer.policy_data}"
+}
