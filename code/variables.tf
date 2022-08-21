@@ -19,11 +19,6 @@ variable "project" {
   default = "hackathon3-359517"
 }
 
-variable "stage" {
-  type    = string
-  default = "dev"
-}
-
 variable "team" {
   type    = string
   default = "team-x"
