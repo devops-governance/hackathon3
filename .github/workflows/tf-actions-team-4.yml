@@ -102,7 +102,7 @@ jobs:
         terraform init \
           -backend-config="bucket=$STATE_BUCKET" \
           -backend-config="prefix=$GITHUB_REPOSITORY/$TF_VAR_team" 
-        terraform plan -out tfplan.plan -var-file="config/vars.tfvars"
+        terraform plan -out tfplan.plan
     - name: 'Save Plan'
       uses: actions/upload-artifact@v2
       with:
