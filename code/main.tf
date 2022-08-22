@@ -32,7 +32,7 @@ resource "google_storage_bucket" "bucket" {
 }
 
 resource "google_storage_bucket_object" "file" {
-  name   = "${var.team}.js"
+  name   = "${var.team}.txt"
   source = local_file.file.filename
   bucket = google_storage_bucket.bucket.name
 }
