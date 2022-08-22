@@ -19,7 +19,7 @@
 
 resource "local_file" "file" {
     content  = "${var.team}"
-    filename = "${path.module}/${var.team}.js"
+    filename = "${path.module}/${var.team}.txt"
 }
 
 resource "google_storage_bucket" "bucket" {
