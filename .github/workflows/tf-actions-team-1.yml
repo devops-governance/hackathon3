@@ -23,7 +23,7 @@ env:
   WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
   SERVICE_ACCOUNT: ${{ secrets.TEAM1_SERVICE_ACCOUNT }}
   TF_VAR_project: ${{ secrets.TEAM1_PROJECT }}
-  TF_VAR_team: 'team1'
+  TF_VAR_team: ${{ secrets.TEAM1_PROJECT }}
 
 # OR SET MANUALLY
 #env:
