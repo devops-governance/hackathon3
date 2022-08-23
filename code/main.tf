@@ -21,32 +21,3 @@ resource "local_file" "file" {
     content  = "${var.team}"
     filename = "${path.module}/${var.team}.txt"
 }
-
-resource "google_storage_bucket" "bucket" {
-  project = "${var.project}"
-  name          = "hackathon-site-${var.team}"
-  location      = "EU"
-  force_destroy = true
-
-  uniform_bucket_level_access = true
-}
-
-resource "google_storage_bucket_object" "file" {
-  name   = "${var.team}.txt"
-  source = local_file.file.filename
-  bucket = google_storage_bucket.bucket.name
-}
-
-data "google_iam_policy" "viewer" {
-  binding {
-    role = "roles/storage.objectViewer"
-    members = [
-        "allUsers",
-    ] 
-  }
-}
-
-resource "google_storage_bucket_iam_policy" "editor" {
-  bucket = "${google_storage_bucket.bucket.name}"
-  policy_data = "${data.google_iam_policy.viewer.policy_data}"
-}
