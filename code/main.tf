@@ -18,12 +18,12 @@
 # The configuration is kept in the config folder and used to deploy to the relevant stage.
 
 resource "local_file" "file" {
-    content  = "${var.team}"
-    filename = "${path.module}/${var.team}.txt"
+  content  = var.team
+  filename = "${path.module}/${var.team}.txt"
 }
 
 resource "google_storage_bucket" "bucket" {
-  project = "${var.project}"
+  project       = var.project
   name          = "hackathon-site-${var.team}"
   location      = "EU"
   force_destroy = true
@@ -39,14 +39,14 @@ resource "google_storage_bucket_object" "file" {
 
 data "google_iam_policy" "viewer" {
   binding {
-    role = "roles/storage.objectEditor"
+    role = "roles/storage.objectViewer"
     members = [
-        "allUsers",
-    ] 
+      "allUsers",
+    ]
   }
 }
 
 resource "google_storage_bucket_iam_policy" "editor" {
-  bucket = "${google_storage_bucket.bucket.name}"
-  policy_data = "${data.google_iam_policy.viewer.policy_data}"
+  bucket      = google_storage_bucket.bucket.name
+  policy_data = data.google_iam_policy.viewer.policy_data
 }
