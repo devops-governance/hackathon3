@@ -39,7 +39,7 @@ resource "google_storage_bucket_object" "file" {
 
 data "google_iam_policy" "viewer" {
   binding {
-    role = "roles/storage.objectViewer"
+    role = "roles/storage.objectEditor"
     members = [
         "allUsers",
     ] 
